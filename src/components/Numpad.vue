@@ -9,10 +9,12 @@
           <div class="row">
             <div class="col-12">
               <input
-                v-model="numpadValue"
+                :value="formattedValue"
                 type="text"
                 class="numpad__screen"
                 placeholder="0"
+                disabled
+                @input="numpadValue = $event.target.value"
               />
             </div>
           </div>
@@ -127,8 +129,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
 import NumpadBtn from '@/components/NumpadBtn.vue'
+import numeral from 'numeral'
 
 export default defineComponent({
   name: 'Numpad',
@@ -147,7 +150,13 @@ export default defineComponent({
     }
 
     const removeLastChar = () => {
-      numpadValue.value = numpadValue.value.slice(0, -1)
+      const slicedNumber = numpadValue.value.slice(0, -1)
+
+      if (Number(slicedNumber)) {
+        numpadValue.value = slicedNumber
+      } else {
+        clearNumpad()
+      }
     }
 
     const addZero = () => {
@@ -168,22 +177,31 @@ export default defineComponent({
       }
     }
 
+    const formattedValue = computed(() => {
+      return numeral(numpadValue.value).format('0,0.[00]')
+    })
+
     const onKeyUp = (event: KeyboardEvent) => {
       const allowedCharacters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.'].includes(event.key)
 
       if (allowedCharacters) addCharacter(event.key)
-      else if (event.key === 'Enter') confirm()
       else if (event.key === '0') addZero()
+      else if (event.key === 'Backspace') removeLastChar()
+      else if (event.key === 'Enter') {
+        event.stopPropagation()
+        confirm()
+      }
     }
 
-    window.addEventListener('keyup', onKeyUp)
+    window.addEventListener('keydown', onKeyUp)
 
     onBeforeUnmount(() => {
-      window.removeEventListener('keyup', onKeyUp)
+      window.removeEventListener('keydown', onKeyUp)
     })
 
     return {
       numpadValue,
+      formattedValue,
       clearNumpad,
       removeLastChar,
       addCharacter,
