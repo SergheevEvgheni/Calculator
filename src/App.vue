@@ -1,29 +1,17 @@
 <template>
  <div class="container">
-   <div class="row">
-     <NumpadConfig />
-   </div>
-   <div class="row">
-     <div class="col-9">
-       <Numpad />
-     </div>
-     <div class="col-3">
-       Numpad Logs
-     </div>
-   </div>
+  <NumpadControl />
  </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import NumpadConfig from '@/components/NumpadConfig.vue'
-import Numpad from '@/components/Numpad.vue'
+import NumpadControl from '@/components/NumpadControl.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    Numpad,
-    NumpadConfig
+    NumpadControl
   },
   setup () {
     console.log('setup')
