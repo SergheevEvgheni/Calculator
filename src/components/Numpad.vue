@@ -74,7 +74,7 @@ export default defineComponent({
     msg: String
   },
   setup (props) {
-    console.log(props.msg)
+    
   }
 })
 </script>
@@ -137,33 +137,4 @@ export default defineComponent({
       }
     }
   }
-
-  //.calculator-screen {
-  //  width: 100%;
-  //  height: 80px;
-  //  border: none;
-  //  background-color: #252525;
-  //  color: #fff;
-  //  text-align: right;
-  //  padding-right: 20px;
-  //  padding-left: 10px;
-  //  font-size: 4rem;
-  //}
-  //
-  //button {
-  //  height: 60px;
-  //  font-size: 2rem!important;
-  //}
-  //
-  //.equal-sign {
-  //  height: 98%;
-  //  grid-area: 2 / 4 / 6 / 5;
-  //}
-  //
-  //.calculator-keys {
-  //  display: grid;
-  //  grid-template-columns: repeat(4, 1fr);
-  //  grid-gap: 20px;
-  //  padding: 20px;
-  //}
 </style>
