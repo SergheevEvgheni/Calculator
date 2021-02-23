@@ -1,17 +1,32 @@
 <template>
-  <div class="container">
-    <Numpad msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+ <div class="container">
+   <div class="row">
+     <NumpadConfig />
+   </div>
+   <div class="row">
+     <div class="col-9">
+       <Numpad />
+     </div>
+     <div class="col-3">
+       Numpad Logs
+     </div>
+   </div>
+ </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import Numpad from './components/Numpad.vue'
+import NumpadConfig from '@/components/NumpadConfig.vue'
+import Numpad from '@/components/Numpad.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    Numpad
+    Numpad,
+    NumpadConfig
+  },
+  setup () {
+    console.log('setup')
   }
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="numpad">
     <div class="numpad__header">
-      <i class="fas fa-times"></i>
+      <i class="fas fa-times" />
     </div>
     <div class="numpad__body">
       <div class="row">
@@ -12,74 +12,71 @@
                 type="text"
                 class="numpad__screen"
                 placeholder="0"
-                disabled
               />
             </div>
           </div>
 
           <div class="row">
             <div class="col-4">
-              <button type="button" value="7" class="btn btn--number">7</button>
+              <NumpadBtn btn-style="number">7</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" value="8" class="btn btn--number">8</button>
+              <NumpadBtn btn-style="number">8</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" value="9" class="btn btn--number">9</button>
+              <NumpadBtn btn-style="number">9</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" value="4" class="btn btn--number">4</button>
+              <NumpadBtn btn-style="number">4</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" value="5" class="btn btn--number">5</button>
+              <NumpadBtn btn-style="number">5</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" value="6" class="btn btn--number">6</button>
+              <NumpadBtn btn-style="number">6</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" value="1" class="btn btn--number">1</button>
+              <NumpadBtn btn-style="number">1</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" value="2" class="btn btn--number">2</button>
+              <NumpadBtn btn-style="number">2</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" value="3" class="btn btn--number">3</button>
+              <NumpadBtn btn-style="number">3</NumpadBtn>
             </div>
-
             <div class="col-8 flex-grow-1">
-              <button type="button" value="0" class="btn btn--number flex-grow-1">0</button>
+              <NumpadBtn btn-style="number">0</NumpadBtn>
             </div>
             <div class="col-4">
-              <button type="button" class="btn btn--number" value=".">.</button>
+              <NumpadBtn btn-style="number">.</NumpadBtn>
             </div>
           </div>
         </div>
 
-        <div class="col-3 d-flex flex-column numpad__control">
-          <button type="button" class="btn btn--control">+/-</button>
-          <button type="button" class="btn btn--control"><i class="fas fa-backspace"></i></button>
-          <button type="button" class="btn btn--control">C</button>
-          <button type="button" class="btn btn--control btn--check"><i class="fas fa-check"></i></button>
+        <div class="col-3 d-flex flex-column">
+          <NumpadBtn btn-style="operator">+/-</NumpadBtn>
+          <NumpadBtn btn-style="operator"><i class="fas fa-backspace"/></NumpadBtn>
+          <NumpadBtn btn-style="operator">C</NumpadBtn>
+          <NumpadBtn btn-style="check"><i class="fas fa-check"/></NumpadBtn>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script lang="ts">
 import { defineComponent } from 'vue'
+import NumpadBtn from '@/components/NumpadBtn.vue'
 
 export default defineComponent({
   name: 'Numpad',
-  props: {
-    msg: String
-  },
-  setup (props) {
-    console.log(props)
+  components: {
+    NumpadBtn
   }
 })
 </script>
-<style scoped lang="scss">
 
+<style scoped lang="scss">
   .numpad {
     width: 380px;
     margin: 60px auto;
@@ -105,36 +102,10 @@ export default defineComponent({
       direction: RTL;
       padding: 5px 10px;
     }
-  }
-
-  button, input {
-    height: 60px;
-    width: 100%;
-    margin-bottom: 10px;
-    font-size: 32px;
-  }
-
-  .btn {
-    &--number {
-      background-color: #424242;
-      color: #fff;
-      &:hover {
-        color: #fff;
-      }
-    }
-    &--control {
-      background-color: #fff;
-      color: #424242;
-      border: 2px solid #424242;
-    }
-    &--check {
-      flex: 1;
-      background-color: #93D300;
-      color: #fff;
-      border: none;
-      &:hover {
-        color: #fff;
-      }
+    button, input {
+      width: 100%;
+      margin-bottom: 10px;
+      font-size: 32px;
     }
   }
 </style>
