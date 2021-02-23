@@ -74,7 +74,7 @@ export default defineComponent({
     msg: String
   },
   setup (props) {
-    
+    console.log(props)
   }
 })
 </script>
