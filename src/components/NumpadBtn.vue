@@ -3,6 +3,7 @@
     type="button"
     class="btn"
     :class="`btn--${btnStyle}`"
+    :disabled="isButtonDisabled"
     @click="$emit('btnClick', value)"
   >
     <slot>{{ value }}</slot>
@@ -10,13 +11,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, inject } from 'vue'
 
 export default defineComponent({
   name: 'NumpadBtn',
   props: {
     btnStyle: String,
     value: String
+  },
+  setup () {
+    return {
+      isButtonDisabled: inject('isNumpadDisabled')
+    }
   }
 })
 </script>

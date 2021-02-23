@@ -5,7 +5,10 @@
     </div>
     <div class="numpad__body">
       <div class="row">
-        <div class="col-9 numpad__numbers">
+        <div
+          class="col-9 numpad__numbers"
+          :class="{ 'order-2': isNumpadLeftHanded }"
+        >
           <div class="row">
             <div class="col-12">
               <input
@@ -99,7 +102,10 @@
             </div>
           </div>
         </div>
-        <div class="col-3 d-flex flex-column">
+        <div
+          class="col-3 d-flex flex-column"
+          :class="{ 'order-1' : isNumpadLeftHanded }"
+        >
           <NumpadBtn
             btn-style="operator"
             value="+/-"
@@ -137,6 +143,9 @@ export default defineComponent({
   name: 'Numpad',
   components: {
     NumpadBtn
+  },
+  props: {
+    isNumpadLeftHanded: Boolean
   },
   setup () {
     const numpadValue = ref('')
