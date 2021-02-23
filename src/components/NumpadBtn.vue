@@ -3,8 +3,9 @@
     type="button"
     class="btn"
     :class="`btn--${btnStyle}`"
+    @click="$emit('btnClick', value)"
   >
-    <slot />
+    <slot>{{ value }}</slot>
   </button>
 </template>
 
@@ -14,16 +15,13 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NumpadBtn',
   props: {
-    btnStyle: String
-  },
-  setup (props) {
-    console.log(props)
+    btnStyle: String,
+    value: String
   }
 })
 </script>
 
 <style scoped lang="scss">
-
   .btn {
     &--number {
       background-color: #424242;
