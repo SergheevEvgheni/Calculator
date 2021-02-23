@@ -1,34 +1,34 @@
 <template>
   <div class="row">
-    <div class="col-6 p-3 card mt-5 offset-3">
+    <div class="col-6 offset-3 mt-5 card">
       <div class="card-body">
         <h1 class="card-title col-12 text-center">Numpad Control Panel</h1>
-        <div class="col-4">
-          <div class="row">
-            <div class="form-check form-switch">
-              <input
-                v-model="isNumpadLeftHanded"
-                class="form-check-input"
-                type="checkbox"
-                id="handMode"
-              >
-              <label class="form-check-label" for="handMode">Right Hand Mode</label>
+        <div class="row">
+
+          <div class="col-4">
+            <div class="row">
+              <NumpadCheckbox
+                :checked="isNumpadLeftHanded"
+                label="Right Handed Mode"
+                @update:checked="isNumpadLeftHanded = $event"
+              />
+            </div>
+            <div class="row">
+              <NumpadCheckbox
+                :checked="isNumpadDisabled"
+                label="Disable Numpad"
+                @update:checked="isNumpadDisabled = $event"
+              />
             </div>
           </div>
-          <div class="row">
-            <div class="form-check form-switch">
-              <input
-                v-model="isNumpadDisabled"
-                class="form-check-input"
-                type="checkbox"
-                id="is-disabled"
-              >
-              <label class="form-check-label" for="is-disabled">Is Numpad Disabled</label>
-            </div>
+          <div class="col-4">
+            <NumpadSelect
+              :view="view"
+              @update:view="view = $event"
+            />
           </div>
+          <div class="col-4"></div>
         </div>
-        <div class="col-4"></div>
-        <div class="col-4"></div>
       </div>
     </div>
   </div>
@@ -44,19 +44,27 @@
 <script lang="ts">
 import { defineComponent, ref, provide } from 'vue'
 import Numpad from '@/components/Numpad.vue'
+import NumpadCheckbox from '@/components/reusable/NumpadCheckbox.vue'
+import NumpadSelect from '@/components/reusable/NumpadSelect.vue'
 
 export default defineComponent({
   name: 'NumpadWrapper',
   components: {
-    Numpad
+    Numpad,
+    NumpadCheckbox,
+    NumpadSelect
   },
   setup () {
     const isNumpadLeftHanded = ref(false)
     const isNumpadDisabled = ref(false)
+    const view = ref('Default')
+
     provide('isNumpadDisabled', isNumpadDisabled)
+
     return {
       isNumpadLeftHanded,
-      isNumpadDisabled
+      isNumpadDisabled,
+      view
     }
   }
 })

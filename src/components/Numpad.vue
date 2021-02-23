@@ -24,78 +24,78 @@
 
           <div class="row">
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="7"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="8"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="9"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="4"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="5"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="6"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="1"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="2"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="3"
                 @btnClick="addCharacter"
               />
             </div>
             <div class="col-8 flex-grow-1">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="0"
                 @click="addZero"
               />
             </div>
             <div class="col-4">
-              <NumpadBtn
-                btn-style="number"
+              <NumpadButton
+                button-type="number"
                 value="."
                 @btnClick="addCharacter"
               />
@@ -106,28 +106,28 @@
           class="col-3 d-flex flex-column"
           :class="{ 'order-1' : isNumpadLeftHanded }"
         >
-          <NumpadBtn
-            btn-style="operator"
+          <NumpadButton
+            button-type="operator"
             value="+/-"
             @click="changeSign"
           />
-          <NumpadBtn
-            btn-style="operator"
+          <NumpadButton
+            button-type="operator"
             @click="removeLastChar"
           >
             <i class="fas fa-backspace"/>
-          </NumpadBtn>
-          <NumpadBtn
-            btn-style="operator"
+          </NumpadButton>
+          <NumpadButton
+            button-type="operator"
             value="C"
             @click="clearNumpad"
           />
-          <NumpadBtn
-            btn-style="check"
+          <NumpadButton
+            button-type="check"
             @click="confirm"
           >
             <i class="fas fa-check"/>
-          </NumpadBtn>
+          </NumpadButton>
         </div>
       </div>
     </div>
@@ -135,14 +135,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
-import NumpadBtn from '@/components/NumpadBtn.vue'
+import {
+  defineComponent,
+  ref,
+  computed,
+  onBeforeUnmount
+} from 'vue'
+import NumpadButton from '@/components/reusable/NumpadButton.vue'
 import numeral from 'numeral'
 
 export default defineComponent({
   name: 'Numpad',
   components: {
-    NumpadBtn
+    NumpadButton
   },
   props: {
     isNumpadLeftHanded: Boolean
