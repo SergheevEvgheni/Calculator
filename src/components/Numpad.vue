@@ -1,5 +1,9 @@
 <template>
-  <div class="numpad">
+  <div
+    class="numpad"
+    tabindex="0"
+    @keydown="onKeyDown"
+  >
     <div class="numpad__header">
       <i class="fas fa-times" />
     </div>
@@ -153,7 +157,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import NumpadButton from '@/components/interface/NumpadButton.vue'
 import numeral from 'numeral'
 
@@ -244,10 +248,10 @@ export default defineComponent({
     }
 
     const formattedValue = computed(() => {
-      return numeral(numpadValue.value).format('0,0.[00]')
+      return numeral(numpadValue.value).format('0,0.[0000]')
     })
 
-    const onKeyUp = (event: KeyboardEvent) => {
+    const onKeyDown = (event: KeyboardEvent) => {
       const allowedCharacters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.'].includes(event.key)
 
       if (allowedCharacters) addCharacter(event.key)
@@ -259,12 +263,6 @@ export default defineComponent({
         confirm()
       }
     }
-
-    window.addEventListener('keydown', onKeyUp)
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('keydown', onKeyUp)
-    })
 
     return {
       numpadValue,
@@ -278,7 +276,8 @@ export default defineComponent({
       confirm,
       areScreenAndOperatorsVisible,
       isRemoveButtonVisible,
-      isCurrencyChangerVisible
+      isCurrencyChangerVisible,
+      onKeyDown
     }
   }
 })
@@ -288,10 +287,14 @@ export default defineComponent({
   .numpad {
     width: 38rem;
     margin: 0 auto;
-    box-shadow: 0 0 2rem #424242;
     border-radius: 1rem;
+    &:focus {
+      box-shadow: 0 0 2rem #424242;
+      outline: none;
+    }
     &__header {
       background-color: #039AC3;
+      border: 1px solid #039AC3;
       height: 4rem;
       text-align: right;
       padding: 1rem;
@@ -304,6 +307,8 @@ export default defineComponent({
     }
     &__body {
       padding: 2rem 2rem 1rem 2rem;
+      border: 1px solid #424242;
+      border-top: none;
       border-radius: 0 0 1rem 1rem;
     }
     &__screen {
