@@ -24,6 +24,7 @@ export default defineComponent({
       type: String
     }
   },
+  emits: ['btnClick'],
   setup () {
     return {
       isButtonDisabled: inject('isNumpadDisabled')

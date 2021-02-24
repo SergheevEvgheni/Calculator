@@ -20,13 +20,30 @@
               />
             </div>
           </div>
-          <div class="col-4">
+          <div class="col-4 mt-2">
             <NumpadSelect
               :value="layout"
               @update:value="layout = $event"
             />
           </div>
-          <div class="col-4"></div>
+          <div class="col-4">
+            <div class="row mt-2">
+              <div class="col-6">
+                <NumpadInput
+                  :value="minimumValue"
+                  label="Min Value"
+                  @update:value="minimumValue = $event"
+                />
+              </div>
+             <div class="col-6">
+               <NumpadInput
+                 :value="maximumValue"
+                 label="Max Value"
+                 @update:value="maximumValue = $event"
+               />
+             </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -38,6 +55,10 @@
         :are-screen-and-operators-visible="areScreenAndOperatorsVisible"
         :is-remove-button-visible="isRemoveButtonVisible"
         :is-currency-changer-visible="isCurrencyChangerVisible"
+        :minimum-value="minimumValue"
+        :maximum-value="maximumValue"
+        :formatter="formatter"
+        @numpad-confirm="onNumpadConfirm"
       />
     </div>
   </div>
@@ -48,18 +69,23 @@ import { defineComponent, ref, provide, computed } from 'vue'
 import Numpad from '@/components/Numpad.vue'
 import NumpadCheckbox from '@/components/interface/NumpadCheckbox.vue'
 import NumpadSelect from '@/components/interface/NumpadSelect.vue'
+import NumpadInput from '@/components/interface/NumpadInput.vue'
 import { LayoutTypes } from '@/enums'
 
 export default defineComponent({
-  name: 'NumpadWrapper',
+  name: 'NumpadControl',
   components: {
     Numpad,
     NumpadCheckbox,
-    NumpadSelect
+    NumpadSelect,
+    NumpadInput
   },
   setup () {
     const isNumpadLeftHanded = ref(false)
     const isNumpadDisabled = ref(false)
+    const minimumValue = ref('1')
+    const maximumValue = ref('999')
+    const formatter = ref('0,0.[0000]')
     const layout = ref(LayoutTypes.default)
 
     provide('isNumpadDisabled', isNumpadDisabled)
@@ -74,13 +100,19 @@ export default defineComponent({
       return layout.value === LayoutTypes.currencyChanger
     })
 
+    const onNumpadConfirm = (event: Event) => alert(`Event has been emitted ${event}`)
+
     return {
+      layout,
+      formatter,
       isNumpadLeftHanded,
       isNumpadDisabled,
-      layout,
       areScreenAndOperatorsVisible,
       isRemoveButtonVisible,
-      isCurrencyChangerVisible
+      isCurrencyChangerVisible,
+      minimumValue,
+      maximumValue,
+      onNumpadConfirm
     }
   }
 })

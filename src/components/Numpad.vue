@@ -1,5 +1,9 @@
 <template>
-  <div class="numpad">
+  <div
+    class="numpad"
+    tabindex="0"
+    @keydown="onKeyDown"
+  >
     <div class="numpad__header">
       <i class="fas fa-times" />
     </div>
@@ -153,7 +157,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import NumpadButton from '@/components/interface/NumpadButton.vue'
 import numeral from 'numeral'
 
@@ -178,9 +182,22 @@ export default defineComponent({
     isCurrencyChangerVisible: {
       type: Boolean,
       required: true
+    },
+    minimumValue: {
+      type: String,
+      required: true
+    },
+    maximumValue: {
+      type: String,
+      required: true
+    },
+    formatter: {
+      type: String,
+      default: '0,0.[0000]'
     }
   },
-  setup () {
+  emits: ['numpadConfirm'],
+  setup (props, { emit }) {
     const numpadValue = ref('')
 
     const addCharacter = (character: string) => {
@@ -222,17 +239,23 @@ export default defineComponent({
         const isSeparatorLastCharacter = numpadValue.value.slice(-1) === '.'
         const displayedValue = isSeparatorLastCharacter ? numpadValue.value.slice(0, -1) : numpadValue.value
 
-        alert(displayedValue)
+        const isInMaxRange = Number(numpadValue.value) <= Number(props.maximumValue)
+        const isInMinRange = Number(numpadValue.value) >= Number(props.minimumValue)
+
+        alert(isInMaxRange && isInMinRange ? displayedValue : 'The number you dialed is not in the allowed range')
+
+        emit('numpadConfirm', numpadValue.value)
+
         clearNumpad()
       }
     }
 
     const formattedValue = computed(() => {
       console.log(numpadValue.value)
-      return numeral(numpadValue.value).format('0,0.[00]')
+      return numeral(numpadValue.value).format(props.formatter)
     })
 
-    const onKeyUp = (event: KeyboardEvent) => {
+    const onKeyDown = (event: KeyboardEvent) => {
       const allowedCharacters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.'].includes(event.key)
 
       if (allowedCharacters) addCharacter(event.key)
@@ -245,12 +268,6 @@ export default defineComponent({
       }
     }
 
-    window.addEventListener('keydown', onKeyUp)
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('keydown', onKeyUp)
-    })
-
     return {
       numpadValue,
       formattedValue,
@@ -260,7 +277,8 @@ export default defineComponent({
       addZero,
       addDecSeparator,
       changeSign,
-      confirm
+      confirm,
+      onKeyDown
     }
   }
 })
@@ -270,8 +288,14 @@ export default defineComponent({
   .numpad {
     width: 38rem;
     margin: 0 auto;
-    box-shadow: 0 0 2rem #424242;
     border-radius: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 1rem #424242;
+    transition: all 0.2s;
+    &:focus {
+      box-shadow: 0 0 2rem #424242;
+      outline: none;
+    }
     &__header {
       background-color: #039AC3;
       height: 4rem;

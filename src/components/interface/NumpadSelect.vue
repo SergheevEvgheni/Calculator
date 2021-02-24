@@ -27,6 +27,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['update:value'],
   setup () {
     return {
       LayoutTypes
