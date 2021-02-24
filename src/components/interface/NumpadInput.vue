@@ -1,5 +1,5 @@
 <template>
-  <div class="input-group mb-3 mt-2">
+  <div class="input-group-lg mb-3 mt-2">
     <span
       class="input-group-text"
       id="basic-addon1"
@@ -8,7 +8,7 @@
     </span>
     <input
       :value="value"
-      type="number"
+      type="text"
       class="form-control"
       aria-label="Username"
       @change="$emit('update:value', $event.target.value)"
@@ -23,7 +23,7 @@ export default defineComponent({
   name: 'NumpadInput',
   props: {
     value: {
-      type: Number,
+      type: String,
       required: true
     },
     label: {

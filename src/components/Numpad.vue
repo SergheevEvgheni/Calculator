@@ -180,15 +180,16 @@ export default defineComponent({
       required: true
     },
     minimumValue: {
-      type: Number,
+      type: String,
       required: true
     },
     maximumValue: {
-      type: Number,
+      type: String,
       required: true
     }
   },
-  setup (props) {
+  emits: ['numpadValue'],
+  setup (props, { emit }) {
     const numpadValue = ref('')
 
     const areScreenAndOperatorsVisible = computed(() => {
@@ -237,12 +238,13 @@ export default defineComponent({
     }
 
     const confirm = () => {
-      const isValueInAllowedRange = Number(numpadValue.value) >= props.minimumValue && Number(numpadValue.value) <= props.maximumValue
+      const isValueInAllowedRange = Number(numpadValue.value) >= Number(props.minimumValue) && Number(numpadValue.value) <= Number(props.maximumValue)
       if (numpadValue.value.length) {
         const isSeparatorLastCharacter = numpadValue.value.slice(-1) === '.'
         const displayedValue = isSeparatorLastCharacter ? numpadValue.value.slice(0, -1) : numpadValue.value
 
         alert(isValueInAllowedRange ? displayedValue : 'The number you dialed is not the allowed range')
+        emit('numpadValue', numpadValue.value)
         clearNumpad()
       }
     }

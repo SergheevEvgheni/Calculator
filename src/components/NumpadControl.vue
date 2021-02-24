@@ -37,8 +37,9 @@
             </div>
             <div class="row">
               <NumpadInput
-                v-model="maximumValue"
+                :value="maximumValue"
                 label="Maximum Value"
+                @update:value="maximumValue = $event"
               />
             </div>
           </div>
@@ -54,6 +55,7 @@
         :layout-types="layoutTypes"
         :minimum-value="minimumValue"
         :maximum-value="maximumValue"
+        @numpad-value="onNumpadValue"
       />
     </div>
   </div>
@@ -67,7 +69,7 @@ import NumpadSelect from '@/components/interface/NumpadSelect.vue'
 import NumpadInput from '@/components/interface/NumpadInput.vue'
 
 export default defineComponent({
-  name: 'NumpadWrapper',
+  name: 'NumpadControl',
   components: {
     Numpad,
     NumpadCheckbox,
@@ -85,10 +87,12 @@ export default defineComponent({
     const isNumpadLeftHanded = ref(false)
     const isNumpadDisabled = ref(false)
     const layout = ref(layoutTypes.default)
-    const minimumValue = ref(0)
-    const maximumValue = ref(999999)
+    const minimumValue = ref('1')
+    const maximumValue = ref('999')
 
     provide('isNumpadDisabled', isNumpadDisabled)
+
+    const onNumpadValue = (event: Event) => console.log(event)
 
     return {
       isNumpadLeftHanded,
@@ -96,7 +100,8 @@ export default defineComponent({
       layoutTypes,
       layout,
       minimumValue,
-      maximumValue
+      maximumValue,
+      onNumpadValue
     }
   }
 })
