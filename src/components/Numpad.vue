@@ -11,7 +11,10 @@
       <div class="row">
         <div
           class="col-9 numpad__numbers"
-          :class="{ 'order-2': isNumpadLeftHanded, 'col-12': !areScreenAndOperatorsVisible }"
+          :class="{
+            'col-12': !areScreenAndOperatorsVisible,
+            'order-2': isNumpadLeftHanded
+          }"
         >
           <div
             v-if="areScreenAndOperatorsVisible"
@@ -124,10 +127,10 @@
         >
           <NumpadButton
             v-if="isCurrencyChangerVisible"
+            :value="currencySign === '€' ? '€' : '$'"
             button-type="operator"
-          >
-            $
-          </NumpadButton>
+            @click="onCurrencyChange"
+          />
           <NumpadButton
             button-type="operator"
             value="+/-"
@@ -196,9 +199,10 @@ export default defineComponent({
       default: '0,0.[0000]'
     }
   },
-  emits: ['numpadConfirm'],
+  emits: ['confirm', 'currencyChange'],
   setup (props, { emit }) {
     const numpadValue = ref('')
+    const currencySign = ref('€')
 
     const addCharacter = (character: string) => {
       numpadValue.value += character
@@ -242,16 +246,23 @@ export default defineComponent({
         const isInMaxRange = Number(numpadValue.value) <= Number(props.maximumValue)
         const isInMinRange = Number(numpadValue.value) >= Number(props.minimumValue)
 
-        alert(isInMaxRange && isInMinRange ? displayedValue : 'The number you dialed is not in the allowed range')
-
-        emit('numpadConfirm', numpadValue.value)
-
-        clearNumpad()
+        if (isInMaxRange && isInMinRange) {
+          emit('confirm', displayedValue)
+          clearNumpad()
+        } else {
+          alert('The number you dialed is not in the allowed range')
+        }
       }
+    }
+
+    const onCurrencyChange = () => {
+      emit('currencyChange', currencySign.value)
+      currencySign.value = currencySign.value === '€' ? '$' : '€'
     }
 
     const formattedValue = computed(() => {
       console.log(numpadValue.value)
+
       return numeral(numpadValue.value).format(props.formatter)
     })
 
@@ -271,6 +282,7 @@ export default defineComponent({
     return {
       numpadValue,
       formattedValue,
+      currencySign,
       clearNumpad,
       removeLastChar,
       addCharacter,
@@ -278,7 +290,8 @@ export default defineComponent({
       addDecSeparator,
       changeSign,
       confirm,
-      onKeyDown
+      onKeyDown,
+      onCurrencyChange
     }
   }
 })

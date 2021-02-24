@@ -58,7 +58,8 @@
         :minimum-value="minimumValue"
         :maximum-value="maximumValue"
         :formatter="formatter"
-        @numpad-confirm="onNumpadConfirm"
+        @confirm="onNumpadConfirm"
+        @currency-change="onCurrencyChange"
       />
     </div>
   </div>
@@ -100,7 +101,11 @@ export default defineComponent({
       return layout.value === LayoutTypes.currencyChanger
     })
 
-    const onNumpadConfirm = (event: Event) => alert(`Event has been emitted ${event}`)
+    const onNumpadConfirm = (event: Event) => alert(`Confirm event has been emitted ${event}`)
+
+    const onCurrencyChange = (currencySign: string) => {
+      alert(`Currency change event has been emitted with ${currencySign}`)
+    }
 
     return {
       layout,
@@ -112,7 +117,8 @@ export default defineComponent({
       isCurrencyChangerVisible,
       minimumValue,
       maximumValue,
-      onNumpadConfirm
+      onNumpadConfirm,
+      onCurrencyChange
     }
   }
 })
