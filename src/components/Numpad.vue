@@ -174,6 +174,14 @@ export default defineComponent({
     layoutTypes: {
       type: Object,
       required: true
+    },
+    minimumValue: {
+      type: Number,
+      required: true
+    },
+    maximumValue: {
+      type: Number,
+      required: true
     }
   },
   setup (props) {
@@ -225,11 +233,12 @@ export default defineComponent({
     }
 
     const confirm = () => {
+      const isValueInAllowedRange = Number(numpadValue.value) >= props.minimumValue && Number(numpadValue.value) <= props.maximumValue
       if (numpadValue.value.length) {
         const isSeparatorLastCharacter = numpadValue.value.slice(-1) === '.'
         const displayedValue = isSeparatorLastCharacter ? numpadValue.value.slice(0, -1) : numpadValue.value
 
-        alert(displayedValue)
+        alert(isValueInAllowedRange ? displayedValue : 'The number you dialed is not the allowed range')
         clearNumpad()
       }
     }
