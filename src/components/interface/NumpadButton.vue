@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'NumpadButton',
@@ -21,20 +21,17 @@ export default defineComponent({
       required: true
     },
     value: {
-      type: String
+      type: String,
+      required: true
     }
   },
-  emits: ['btnClick'],
-  setup () {
-    return {
-      isButtonDisabled: inject('isNumpadDisabled')
-    }
-  }
+  emits: ['btnClick']
 })
 </script>
 
 <style scoped lang="scss">
 .btn {
+  box-sizing: border-box;
   &--number {
     background-color: #424242;
     color: #fff;

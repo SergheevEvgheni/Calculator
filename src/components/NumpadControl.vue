@@ -52,6 +52,7 @@
     <div class="col-12">
       <Numpad
         :is-numpad-left-handed="isNumpadLeftHanded"
+        :is-numpad-disabled="isNumpadDisabled"
         :are-screen-and-operators-visible="areScreenAndOperatorsVisible"
         :is-remove-button-visible="isRemoveButtonVisible"
         :is-currency-changer-visible="isCurrencyChangerVisible"
@@ -66,7 +67,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide, computed } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import Numpad from '@/components/Numpad.vue'
 import NumpadCheckbox from '@/components/interface/NumpadCheckbox.vue'
 import NumpadSelect from '@/components/interface/NumpadSelect.vue'
@@ -88,8 +89,6 @@ export default defineComponent({
     const maximumValue = ref('999')
     const formatter = ref('0,0.[0000]')
     const layout = ref(LayoutTypes.default)
-
-    provide('isNumpadDisabled', isNumpadDisabled)
 
     const areScreenAndOperatorsVisible = computed(() => {
       return layout.value === LayoutTypes.default || layout.value === LayoutTypes.currencyChanger

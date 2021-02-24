@@ -35,6 +35,7 @@
           <div class="row">
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="7"
                 @btnClick="addCharacter"
@@ -42,6 +43,7 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="8"
                 @btnClick="addCharacter"
@@ -49,6 +51,7 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="9"
                 @btnClick="addCharacter"
@@ -56,6 +59,7 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="4"
                 @btnClick="addCharacter"
@@ -63,6 +67,7 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="5"
                 @btnClick="addCharacter"
@@ -70,6 +75,7 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="6"
                 @btnClick="addCharacter"
@@ -77,6 +83,7 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="1"
                 @btnClick="addCharacter"
@@ -84,6 +91,7 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="2"
                 @btnClick="addCharacter"
@@ -91,6 +99,7 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="3"
                 @btnClick="addCharacter"
@@ -98,6 +107,7 @@
             </div>
             <div class="col-8 flex-grow-1">
               <NumpadButton
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="0"
                 @click="addZero"
@@ -106,12 +116,14 @@
             <div class="col-4">
               <NumpadButton
                 v-if="!isRemoveButtonVisible"
+                :disabled="isNumpadDisabled"
                 button-type="number"
                 value="."
                 @btnClick="addDecSeparator"
               />
               <NumpadButton
                 v-else
+                :disabled="isNumpadDisabled"
                 button-type="operator"
                 @click="removeLastChar"
               >
@@ -127,27 +139,32 @@
         >
           <NumpadButton
             v-if="isCurrencyChangerVisible"
+            :disabled="isNumpadDisabled"
             :value="currencySign === '€' ? '€' : '$'"
             button-type="operator"
             @click="onCurrencyChange"
           />
           <NumpadButton
+            :disabled="isNumpadDisabled"
             button-type="operator"
             value="+/-"
             @click="changeSign"
           />
           <NumpadButton
+            :disabled="isNumpadDisabled"
             button-type="operator"
             @click="removeLastChar"
           >
             <i class="fas fa-backspace"/>
           </NumpadButton>
           <NumpadButton
+            :disabled="isNumpadDisabled"
             button-type="operator"
             value="C"
             @click="clearNumpad"
           />
           <NumpadButton
+            :disabled="isNumpadDisabled"
             button-type="check"
             @click="confirm"
           >
@@ -171,6 +188,10 @@ export default defineComponent({
   },
   props: {
     isNumpadLeftHanded: {
+      type: Boolean,
+      required: true
+    },
+    isNumpadDisabled: {
       type: Boolean,
       required: true
     },
@@ -267,6 +288,7 @@ export default defineComponent({
     })
 
     const onKeyDown = (event: KeyboardEvent) => {
+      if (props.isNumpadDisabled) return
       const allowedCharacters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.'].includes(event.key)
 
       if (allowedCharacters) addCharacter(event.key)
