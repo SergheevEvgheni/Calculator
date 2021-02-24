@@ -288,6 +288,9 @@ export default defineComponent({
     width: 38rem;
     margin: 0 auto;
     border-radius: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 1rem #424242;
+    transition: all 0.2s;
     &:focus {
       box-shadow: 0 0 2rem #424242;
       outline: none;
@@ -307,8 +310,6 @@ export default defineComponent({
     }
     &__body {
       padding: 2rem 2rem 1rem 2rem;
-      border: 1px solid #424242;
-      border-top: none;
       border-radius: 0 0 1rem 1rem;
     }
     &__screen {
