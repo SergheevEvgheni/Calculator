@@ -1,5 +1,9 @@
 <template>
-  <div class="numpad">
+  <div
+    class="numpad"
+    tabindex="0"
+    @keydown="onKeyDown"
+  >
     <div class="numpad__header">
       <i class="fas fa-times" />
     </div>
@@ -153,7 +157,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import NumpadButton from '@/components/interface/NumpadButton.vue'
 import numeral from 'numeral'
 
@@ -174,9 +178,18 @@ export default defineComponent({
     layoutTypes: {
       type: Object,
       required: true
+    },
+    minimumValue: {
+      type: String,
+      required: true
+    },
+    maximumValue: {
+      type: String,
+      required: true
     }
   },
-  setup (props) {
+  emits: ['numpadValue'],
+  setup (props, { emit }) {
     const numpadValue = ref('')
 
     const areScreenAndOperatorsVisible = computed(() => {
@@ -225,20 +238,22 @@ export default defineComponent({
     }
 
     const confirm = () => {
+      const isValueInAllowedRange = Number(numpadValue.value) >= Number(props.minimumValue) && Number(numpadValue.value) <= Number(props.maximumValue)
       if (numpadValue.value.length) {
         const isSeparatorLastCharacter = numpadValue.value.slice(-1) === '.'
         const displayedValue = isSeparatorLastCharacter ? numpadValue.value.slice(0, -1) : numpadValue.value
 
-        alert(displayedValue)
+        alert(isValueInAllowedRange ? displayedValue : 'The number you dialed is not the allowed range')
+        emit('numpadValue', numpadValue.value)
         clearNumpad()
       }
     }
 
     const formattedValue = computed(() => {
-      return numeral(numpadValue.value).format('0,0.[00]')
+      return numeral(numpadValue.value).format('0,0.[0000]')
     })
 
-    const onKeyUp = (event: KeyboardEvent) => {
+    const onKeyDown = (event: KeyboardEvent) => {
       const allowedCharacters = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.'].includes(event.key)
 
       if (allowedCharacters) addCharacter(event.key)
@@ -250,12 +265,6 @@ export default defineComponent({
         confirm()
       }
     }
-
-    window.addEventListener('keydown', onKeyUp)
-
-    onBeforeUnmount(() => {
-      window.removeEventListener('keydown', onKeyUp)
-    })
 
     return {
       numpadValue,
@@ -269,7 +278,8 @@ export default defineComponent({
       confirm,
       areScreenAndOperatorsVisible,
       isRemoveButtonVisible,
-      isCurrencyChangerVisible
+      isCurrencyChangerVisible,
+      onKeyDown
     }
   }
 })
@@ -279,10 +289,17 @@ export default defineComponent({
   .numpad {
     width: 38rem;
     margin: 0 auto;
-    box-shadow: 0 0 2rem #424242;
     border-radius: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 1rem #424242;
+    transition: all 0.2s;
+    &:focus {
+      box-shadow: 0 0 2rem #424242;
+      outline: none;
+    }
     &__header {
       background-color: #039AC3;
+      border: 1px solid #039AC3;
       height: 4rem;
       text-align: right;
       padding: 1rem;

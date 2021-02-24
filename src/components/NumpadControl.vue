@@ -27,7 +27,22 @@
               @update:value="layout = $event"
             />
           </div>
-          <div class="col-4"></div>
+          <div class="col-4">
+            <div class="row">
+              <NumpadInput
+                :value="minimumValue"
+                label="Minimum Value"
+                @update:value="minimumValue = $event"
+              />
+            </div>
+            <div class="row">
+              <NumpadInput
+                :value="maximumValue"
+                label="Maximum Value"
+                @update:value="maximumValue = $event"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -38,6 +53,9 @@
         :is-numpad-left-handed="isNumpadLeftHanded"
         :layout="layout"
         :layout-types="layoutTypes"
+        :minimum-value="minimumValue"
+        :maximum-value="maximumValue"
+        @numpad-value="onNumpadValue"
       />
     </div>
   </div>
@@ -48,13 +66,15 @@ import { defineComponent, ref, provide } from 'vue'
 import Numpad from '@/components/Numpad.vue'
 import NumpadCheckbox from '@/components/interface/NumpadCheckbox.vue'
 import NumpadSelect from '@/components/interface/NumpadSelect.vue'
+import NumpadInput from '@/components/interface/NumpadInput.vue'
 
 export default defineComponent({
-  name: 'NumpadWrapper',
+  name: 'NumpadControl',
   components: {
     Numpad,
     NumpadCheckbox,
-    NumpadSelect
+    NumpadSelect,
+    NumpadInput
   },
   setup () {
     const layoutTypes = {
@@ -67,14 +87,21 @@ export default defineComponent({
     const isNumpadLeftHanded = ref(false)
     const isNumpadDisabled = ref(false)
     const layout = ref(layoutTypes.default)
+    const minimumValue = ref('1')
+    const maximumValue = ref('999')
 
     provide('isNumpadDisabled', isNumpadDisabled)
+
+    const onNumpadValue = (event: Event) => console.log(event)
 
     return {
       isNumpadLeftHanded,
       isNumpadDisabled,
       layoutTypes,
-      layout
+      layout,
+      minimumValue,
+      maximumValue,
+      onNumpadValue
     }
   }
 })
