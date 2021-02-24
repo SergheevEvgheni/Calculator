@@ -3,7 +3,6 @@
     type="button"
     class="btn"
     :class="`btn--${buttonType}`"
-    :disabled="isButtonDisabled"
     @click="$emit('btnClick', value)"
   >
     <slot>{{ value }}</slot>
@@ -22,7 +21,7 @@ export default defineComponent({
     },
     value: {
       type: String,
-      required: true
+      required: false
     }
   },
   emits: ['btnClick']
