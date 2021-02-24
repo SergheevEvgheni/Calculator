@@ -167,28 +167,21 @@ export default defineComponent({
       type: Boolean,
       required: true
     },
-    layout: {
-      type: String,
+    areScreenAndOperatorsVisible: {
+      type: Boolean,
       required: true
     },
-    layoutTypes: {
-      type: Object,
+    isRemoveButtonVisible: {
+      type: Boolean,
+      required: true
+    },
+    isCurrencyChangerVisible: {
+      type: Boolean,
       required: true
     }
   },
-  setup (props) {
+  setup () {
     const numpadValue = ref('')
-
-    const areScreenAndOperatorsVisible = computed(() => {
-      const allowedLayouts = [props.layoutTypes.default, props.layoutTypes.currencyChanger]
-      return allowedLayouts.includes(props.layout)
-    })
-    const isRemoveButtonVisible = computed(() => {
-      return props.layout === props.layoutTypes.numbersRemove
-    })
-    const isCurrencyChangerVisible = computed(() => {
-      return props.layout === props.layoutTypes.currencyChanger
-    })
 
     const addCharacter = (character: string) => {
       numpadValue.value += character
@@ -235,6 +228,7 @@ export default defineComponent({
     }
 
     const formattedValue = computed(() => {
+      console.log(numpadValue.value)
       return numeral(numpadValue.value).format('0,0.[00]')
     })
 
@@ -266,10 +260,7 @@ export default defineComponent({
       addZero,
       addDecSeparator,
       changeSign,
-      confirm,
-      areScreenAndOperatorsVisible,
-      isRemoveButtonVisible,
-      isCurrencyChangerVisible
+      confirm
     }
   }
 })

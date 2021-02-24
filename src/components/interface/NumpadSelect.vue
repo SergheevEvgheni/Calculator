@@ -6,7 +6,7 @@
     @change="$emit('update:value', $event.target.value)"
   >
     <option
-      v-for="type in layoutTypes"
+      v-for="type in LayoutTypes"
       :key="type"
       :value="type"
     >
@@ -17,6 +17,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { LayoutTypes } from '@/enums'
 
 export default defineComponent({
   name: 'NumpadSelect',
@@ -24,10 +25,11 @@ export default defineComponent({
     value: {
       type: String,
       required: true
-    },
-    layoutTypes: {
-      type: Object,
-      required: true
+    }
+  },
+  setup () {
+    return {
+      LayoutTypes
     }
   }
 })
