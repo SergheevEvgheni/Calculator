@@ -22,8 +22,20 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'NumpadCheckbox',
   props: {
-    checked: Boolean,
-    label: String
+    checked: {
+      type: Boolean,
+      required: true
+    },
+    label: {
+      type: String,
+      required: true
+    }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+  .form-switch {
+    font-size: 1.4rem;
+  }
+</style>

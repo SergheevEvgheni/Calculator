@@ -1,15 +1,14 @@
 <template>
   <div class="row">
-    <div class="col-6 offset-3 mt-5 card">
+    <div class="col-8 offset-2 my-5 card">
       <div class="card-body">
-        <h1 class="card-title col-12 text-center">Numpad Control Panel</h1>
+        <h1 class="card-title col-12 text-center mb-4">Numpad Control Panel</h1>
         <div class="row">
-
           <div class="col-4">
             <div class="row">
               <NumpadCheckbox
                 :checked="isNumpadLeftHanded"
-                label="Right Handed Mode"
+                label="Left Handed Mode"
                 @update:checked="isNumpadLeftHanded = $event"
               />
             </div>
@@ -23,8 +22,9 @@
           </div>
           <div class="col-4">
             <NumpadSelect
-              :view="view"
-              @update:view="view = $event"
+              :value="layout"
+              :layout-types="layoutTypes"
+              @update:value="layout = $event"
             />
           </div>
           <div class="col-4"></div>
@@ -36,6 +36,8 @@
     <div class="col-12">
       <Numpad
         :is-numpad-left-handed="isNumpadLeftHanded"
+        :layout="layout"
+        :layout-types="layoutTypes"
       />
     </div>
   </div>
@@ -44,8 +46,8 @@
 <script lang="ts">
 import { defineComponent, ref, provide } from 'vue'
 import Numpad from '@/components/Numpad.vue'
-import NumpadCheckbox from '@/components/reusable/NumpadCheckbox.vue'
-import NumpadSelect from '@/components/reusable/NumpadSelect.vue'
+import NumpadCheckbox from '@/components/interface/NumpadCheckbox.vue'
+import NumpadSelect from '@/components/interface/NumpadSelect.vue'
 
 export default defineComponent({
   name: 'NumpadWrapper',
@@ -55,16 +57,24 @@ export default defineComponent({
     NumpadSelect
   },
   setup () {
+    const layoutTypes = {
+      default: 'Default',
+      numberOnly: 'Numbers only',
+      numbersRemove: 'Numbers + Remove',
+      currencyChanger: 'Currency Changer'
+    }
+
     const isNumpadLeftHanded = ref(false)
     const isNumpadDisabled = ref(false)
-    const view = ref('Default')
+    const layout = ref(layoutTypes.default)
 
     provide('isNumpadDisabled', isNumpadDisabled)
 
     return {
       isNumpadLeftHanded,
       isNumpadDisabled,
-      view
+      layoutTypes,
+      layout
     }
   }
 })

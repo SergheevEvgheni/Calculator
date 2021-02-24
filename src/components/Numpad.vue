@@ -7,14 +7,17 @@
       <div class="row">
         <div
           class="col-9 numpad__numbers"
-          :class="{ 'order-2': isNumpadLeftHanded }"
+          :class="{ 'order-2': isNumpadLeftHanded, 'col-12': !areScreenAndOperatorsVisible }"
         >
-          <div class="row">
+          <div
+            v-if="areScreenAndOperatorsVisible"
+            class="row"
+          >
             <div class="col-12">
               <input
                 :value="formattedValue"
                 type="text"
-                class="numpad__screen"
+                class="form-control numpad__screen"
                 placeholder="0"
                 disabled
                 @input="numpadValue = $event.target.value"
@@ -95,17 +98,32 @@
             </div>
             <div class="col-4">
               <NumpadButton
+                v-if="!isRemoveButtonVisible"
                 button-type="number"
                 value="."
-                @btnClick="addCharacter"
+                @btnClick="addDecSeparator"
               />
+              <NumpadButton
+                v-else
+                button-type="operator"
+                @click="removeLastChar"
+              >
+                <i class="fas fa-backspace"/>
+              </NumpadButton>
             </div>
           </div>
         </div>
         <div
+          v-if="areScreenAndOperatorsVisible"
           class="col-3 d-flex flex-column"
           :class="{ 'order-1' : isNumpadLeftHanded }"
         >
+          <NumpadButton
+            v-if="isCurrencyChangerVisible"
+            button-type="operator"
+          >
+            $
+          </NumpadButton>
           <NumpadButton
             button-type="operator"
             value="+/-"
@@ -135,13 +153,8 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  ref,
-  computed,
-  onBeforeUnmount
-} from 'vue'
-import NumpadButton from '@/components/reusable/NumpadButton.vue'
+import { defineComponent, ref, computed, onBeforeUnmount } from 'vue'
+import NumpadButton from '@/components/interface/NumpadButton.vue'
 import numeral from 'numeral'
 
 export default defineComponent({
@@ -150,10 +163,32 @@ export default defineComponent({
     NumpadButton
   },
   props: {
-    isNumpadLeftHanded: Boolean
+    isNumpadLeftHanded: {
+      type: Boolean,
+      required: true
+    },
+    layout: {
+      type: String,
+      required: true
+    },
+    layoutTypes: {
+      type: Object,
+      required: true
+    }
   },
-  setup () {
+  setup (props) {
     const numpadValue = ref('')
+
+    const areScreenAndOperatorsVisible = computed(() => {
+      const allowedLayouts = [props.layoutTypes.default, props.layoutTypes.currencyChanger]
+      return allowedLayouts.includes(props.layout)
+    })
+    const isRemoveButtonVisible = computed(() => {
+      return props.layout === props.layoutTypes.numbersRemove
+    })
+    const isCurrencyChangerVisible = computed(() => {
+      return props.layout === props.layoutTypes.currencyChanger
+    })
 
     const addCharacter = (character: string) => {
       numpadValue.value += character
@@ -173,6 +208,11 @@ export default defineComponent({
       }
     }
 
+    const addDecSeparator = () => {
+      const separatorAlreadyExists = numpadValue.value.indexOf('.') === -1
+      if (separatorAlreadyExists) addCharacter('.')
+    }
+
     const addZero = () => {
       if (numpadValue.value.length) addCharacter('0')
     }
@@ -186,7 +226,10 @@ export default defineComponent({
 
     const confirm = () => {
       if (numpadValue.value.length) {
-        alert(numpadValue.value)
+        const isSeparatorLastCharacter = numpadValue.value.slice(-1) === '.'
+        const displayedValue = isSeparatorLastCharacter ? numpadValue.value.slice(0, -1) : numpadValue.value
+
+        alert(displayedValue)
         clearNumpad()
       }
     }
@@ -201,6 +244,7 @@ export default defineComponent({
       if (allowedCharacters) addCharacter(event.key)
       else if (event.key === '0') addZero()
       else if (event.key === 'Backspace') removeLastChar()
+      else if (event.key === 'Delete') addDecSeparator()
       else if (event.key === 'Enter') {
         event.stopPropagation()
         confirm()
@@ -220,8 +264,12 @@ export default defineComponent({
       removeLastChar,
       addCharacter,
       addZero,
+      addDecSeparator,
       changeSign,
-      confirm
+      confirm,
+      areScreenAndOperatorsVisible,
+      isRemoveButtonVisible,
+      isCurrencyChangerVisible
     }
   }
 })
@@ -229,34 +277,34 @@ export default defineComponent({
 
 <style scoped lang="scss">
   .numpad {
-    width: 380px;
-    margin: 60px auto;
-    box-shadow: 0 0 20px #424242;
-    border-radius: 10px;
+    width: 38rem;
+    margin: 0 auto;
+    box-shadow: 0 0 2rem #424242;
+    border-radius: 1rem;
     &__header {
       background-color: #039AC3;
-      height: 40px;
+      height: 4rem;
       text-align: right;
-      padding: 12px;
-      border-radius: 10px 10px 0 0;
+      padding: 1rem;
+      border-radius: 1rem 1rem 0 0;
       i {
-        font-size: 18px;
+        font-size: 1.8rem;
         color: #fff;
         opacity: 0.6;
       }
     }
     &__body {
-      padding: 20px 20px 10px 20px;
-      border-radius: 0 0 10px 10px;
+      padding: 2rem 2rem 1rem 2rem;
+      border-radius: 0 0 1rem 1rem;
     }
     &__screen {
       text-align: right;
-      padding: 5px 10px;
+      padding: 0.5rem 1rem;
     }
-    button, input {
+    .btn, .form-control {
       width: 100%;
-      margin-bottom: 10px;
-      font-size: 32px;
+      margin-bottom: 1rem;
+      font-size: 3.2rem;
     }
   }
 </style>

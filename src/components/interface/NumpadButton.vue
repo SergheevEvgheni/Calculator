@@ -16,8 +16,13 @@ import { defineComponent, inject } from 'vue'
 export default defineComponent({
   name: 'NumpadButton',
   props: {
-    buttonType: String,
-    value: String
+    buttonType: {
+      type: String,
+      required: true
+    },
+    value: {
+      type: String
+    }
   },
   setup () {
     return {
